@@ -1,6 +1,8 @@
 #ifndef DATA_STRUCTURES_HPP
 #define DATA_STRUCTURES_HPP
 
+#include <map>
+#include <any>
 #include <memory>
 #include <vector>
 #include <stddef.h>
