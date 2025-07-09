@@ -5,6 +5,7 @@
 #include <any>
 #include <memory>
 #include <vector>
+#include <atomic>
 #include <stddef.h>
 #include <typeinfo>
 #include <iostream>

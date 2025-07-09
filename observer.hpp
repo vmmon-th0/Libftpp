@@ -9,13 +9,13 @@ class Observer
     public:
         void subscribe(const TEvent& event, const std::function<void()>& callback)
         {
-            _callbacks[event].push_back(callback);
+            this->_callbacks[event].push_back(callback);
         }
 
         void notify(const TEvent& event)
         {
-            auto it = _callbacks.find(event);
-            if (it == _callbacks.end())
+            auto it = this->_callbacks.find(event);
+            if (it == this->_callbacks.end())
             {
                 return;
             }

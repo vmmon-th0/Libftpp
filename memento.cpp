@@ -60,7 +60,7 @@ uint16_t MainCharacter::getXp() const
 
 void MainCharacter::_saveToSnapshot(Snapshot& snapshot)
 {
-    snapshot.setSnapshot(KEY_PSEUDO, _pseudo);
+    snapshot.setSnapshot(KEY_PSEUDO, this->_pseudo);
     snapshot.setSnapshot(KEY_XP, static_cast<uint16_t>(_xp));
 }
 
@@ -70,7 +70,7 @@ void MainCharacter::_loadFromSnapshot(const Snapshot& snapshot)
     {
         try
         {
-            _pseudo = std::any_cast<std::string>(snapshot.getSnapshot(KEY_PSEUDO));
+            this->_pseudo = std::any_cast<std::string>(snapshot.getSnapshot(KEY_PSEUDO));
         }
         catch (const std::bad_any_cast&)
         {
@@ -82,7 +82,7 @@ void MainCharacter::_loadFromSnapshot(const Snapshot& snapshot)
     {
         try
         {
-            _xp = std::any_cast<uint16_t>(snapshot.getSnapshot(KEY_XP));
+            this->_xp = std::any_cast<uint16_t>(snapshot.getSnapshot(KEY_XP));
         }
         catch (const std::bad_any_cast&)
         {
