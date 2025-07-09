@@ -13,5 +13,7 @@
 #include <stdexcept>
 #include <type_traits>
 #include <cstring>
+#include <functional>
+#include <unordered_map>
 
 #endif
