@@ -6,7 +6,6 @@
 class ThreadSafeIostream
 {
     public:
-    
         template<typename T>
         void prompt(const std::string& question, T& dest)
         {
@@ -17,13 +16,6 @@ class ThreadSafeIostream
         
         template<typename T>
         ThreadSafeIostream& operator<<(const T& val)
-        {
-            _buffer << val;
-            return *this;
-        }
-
-        template<typename T>
-        void operator>>(const T& val)
         {
             _buffer << val;
             return *this;
