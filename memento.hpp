@@ -1,7 +1,7 @@
 #ifndef MEMENTO_HPP
 #define MEMENTO_HPP
 
-#include "data_structures.hpp"
+#include "design_patterns.hpp"
 
 class Memento
 {

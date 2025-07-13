@@ -1,7 +1,7 @@
 #ifndef THREAD_SAFE_IOSTREAM_HPP
 #define THREAD_SAFE_IOSTREAM_HPP
 
-#include "data_structures.hpp"
+#include "threading.hpp"
 
 class ThreadSafeIostream
 {

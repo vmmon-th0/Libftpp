@@ -1,7 +1,7 @@
 #ifndef STATE_MACHINE_HPP
 #define STATE_MACHINE_HPP
 
-#include "data_structures.hpp"
+#include "design_patterns.hpp"
 
 template<typename TState>
 class StateMachine

@@ -1,7 +1,7 @@
 #ifndef SINGLETON_HPP
 #define SINGLETON_HPP
 
-#include "data_structures.hpp"
+#include "design_patterns.hpp"
 
 template<typename TType>
 class Singleton

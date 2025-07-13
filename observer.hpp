@@ -1,7 +1,7 @@
 #ifndef OBSERVER_HPP
 #define OBSERVER_HPP
 
-#include "data_structures.hpp"
+#include "design_patterns.hpp"
 
 template<typename TEvent>
 class Observer
