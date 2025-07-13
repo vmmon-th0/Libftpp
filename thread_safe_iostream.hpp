@@ -6,6 +6,9 @@
 class ThreadSafeIostream
 {
     public:
+        ThreadSafeIostream();
+        ~ThreadSafeIostream();
+
         template<typename T>
         void prompt(const std::string& question, T& dest)
         {

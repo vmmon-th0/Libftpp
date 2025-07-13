@@ -7,39 +7,61 @@ template <typename TType>
 class ThreadSafeQueue
 {
     public:
-        void push_back(const TType& newElement)
+        ThreadSafeQueue() = default;
+        ~ThreadSafeQueue() = default;
+
+        template <typename U, typename = typename std::enable_if<std::is_constructible<TType, U&&>::value>::type>
+        void push_back(U&& newElement)
         {
             std::lock_guard<std::mutex> lock(this->_mutex);
-            _deque.push_back(newElement);
+            this->_queue.push_back(std::forward<U>(newElement));
         }
-        
-        void push_front(const TType& newElement)
+
+        template <typename U, typename = typename std::enable_if<std::is_constructible<TType, U&&>::value>::type>
+        void push_front(U&& newElement)
         {
             std::lock_guard<std::mutex> lock(this->_mutex);
-            _deque.push_front(newElement);
+            this->_queue.push_front(std::forward<U>(newElement));
         }
-        
+
         TType pop_back()
         {
             std::lock_guard<std::mutex> lock(this->_mutex);
-            return _deque.pop_back(newElement);
+            if (this->_queue.empty()) {
+                throw std::runtime_error("Attempt to pop from empty queue (back).");
+            }
+            TType val = std::move(this->_queue.back());
+            this->_queue.pop_back();
+            return val;
         }
-        
+
         TType pop_front()
         {
             std::lock_guard<std::mutex> lock(this->_mutex);
-            return _deque.pop_front(newElement);
+            if (this->_queue.empty())
+            {
+                throw std::runtime_error("Attempt to pop from empty queue (front).");
+            }
+            TType val = std::move(this->_queue.front());
+            this->_queue.pop_front();
+            return val;
         }
 
-        bool empty()
+        bool empty() const
         {
-            std::lock_guard<std::mutex> lock(_mutex);
-            return this->_deque.empty();
+            std::lock_guard<std::mutex> lock(this->_mutex);
+            return this->_queue.empty();
+        }
+
+        std::size_t size() const
+        {
+            std::lock_guard<std::mutex> lock(this->_mutex);
+            return this->_queue.size();
         }
 
     private:
-        std::mutex _mutex;
-        std::deque<TType> _deque;
+        std::deque<TType> _queue;
+        mutable std::mutex _mutex;
 };
 
 #endif
