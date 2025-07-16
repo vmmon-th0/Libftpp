@@ -1,6 +1,6 @@
 #include "persistent_worker.hpp"
 
-PersistentWorker::PersistentWorker() : _workerThread(std::thread(PersistentWorker::_persistentLoop)), _running(true)
+PersistentWorker::PersistentWorker() : _running(true), _workerThread(std::thread(&PersistentWorker::_persistentLoop, this))
 {
 }
 
@@ -36,7 +36,8 @@ void PersistentWorker::_persistentLoop()
             std::unique_lock<std::mutex> lock(this->_mutex);
             if (this->_tasks.empty())
             {
-                this->_cv.wait(lock, [this] { return !this->_tasks.empty() || !this->_running; });
+                this->_cv.wait_for(lock, std::chrono::milliseconds(10), 
+                   [this]{ return !this->_tasks.empty() || !this->_running; });
             }
 
             for (const auto& task : this->_tasks)
@@ -50,7 +51,8 @@ void PersistentWorker::_persistentLoop()
             try
             {
                 task();
-            } catch (...)
+            }
+            catch (...)
             {
             }
         }
