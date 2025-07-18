@@ -24,6 +24,8 @@ class DataBuffer
         DataBuffer& operator<<(const char* str);
         DataBuffer& operator>>(std::string& str);
 
+        const std::vector<std::uint8_t>& rawData() const noexcept;
+
     private:
         std::size_t _read_pos;
         std::vector<std::uint8_t> _buffer;
