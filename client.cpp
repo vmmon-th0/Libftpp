@@ -9,7 +9,7 @@ Client::~Client()
     disconnect();
 }
 
-void Client::connect(const std::string& address, const size_t& port)
+void Client::connect(const std::string& address, const std::size_t& port)
 {
     if (this->_sockfd != -1)
     {
@@ -23,7 +23,6 @@ void Client::connect(const std::string& address, const size_t& port)
 
     int flags = fcntl(this->_sockfd, F_GETFL, 0);
     fcntl(this->_sockfd, F_SETFL, flags | O_NONBLOCK);
-
     sockaddr_in serv_addr{};
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(static_cast<uint16_t>(port));
@@ -66,8 +65,7 @@ void Client::send(const Message& message)
         throw std::runtime_error("Not connected");
     }
     const std::uint8_t* dataPtr = message.data();
-
-    size_t totalSent = 0;
+    std::size_t totalSent = 0;
     while (totalSent < message.size())
     {
         ssize_t sent = ::send(this->_sockfd, dataPtr + totalSent, message.size() - totalSent, 0);
@@ -77,7 +75,7 @@ void Client::send(const Message& message)
         }
         if (sent > 0)
         {
-            totalSent += static_cast<size_t>(sent);
+            totalSent += static_cast<std::size_t>(sent);
         }
     }
 }
@@ -94,23 +92,17 @@ void Client::update()
     {
         return;
     }
-
     std::vector<uint8_t> buffer(4096);
     ssize_t bytesRead = ::recv(this->_sockfd, buffer.data(), buffer.size(), 0);
     while (bytesRead > 0)
     {
-        std::vector<uint8_t> data(buffer.begin(), buffer.begin() + bytesRead);
         Message msg(read_le16(buffer));
-
         msg << buffer;
-
         auto it = this->_actions.find(msg.getType());
         if (it != this->_actions.end())
         {
             it->second(msg);
         }
-
         bytesRead = ::recv(this->_sockfd, buffer.data(), buffer.size(), 0);
     }
-    // If bytesRead < 0 and errno is EWOULDBLOCK/EAGAIN, no more data now
 }

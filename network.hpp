@@ -2,14 +2,15 @@
 #define NETWORK_HPP
 
 #include <string>
+#include <errno.h>
 #include <functional>
-#include <unordered_map>
 #include <stdexcept>
 #include <vector>
-#include <sys/socket.h>
-#include <arpa/inet.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <errno.h>
+#include <arpa/inet.h>
+#include <unordered_map>
+#include <sys/epoll.h>
+#include <sys/socket.h>
 
 #endif

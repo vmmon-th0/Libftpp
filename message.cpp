@@ -2,13 +2,14 @@
 
 Message::Message(int type): _type(type)
 {
+    this->_buffer << type;
 }
 
 Message::~Message()
 {
 }
 
-int Message::type()
+Message::Type Message::getType() const noexcept
 {
     return this->_type;
 }

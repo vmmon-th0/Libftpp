@@ -11,12 +11,9 @@ class Client
         ~Client();
 
         void connect(const std::string& address, const size_t& port);
-
         void disconnect();
         void defineAction(Message::Type messageType, const std::function<void(const Message&)>& action);
-
         void send(const Message& message);
-
         void update();
 
     private:
