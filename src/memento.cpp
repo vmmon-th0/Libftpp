@@ -1,5 +1,4 @@
 #include "memento.hpp"
-#include <iostream>
 
 Memento::Snapshot Memento::save()
 {
