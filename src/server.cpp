@@ -1,14 +1,13 @@
 #include "server.hpp"
 
-Server::Server()
+Server::Server(): _sockfd(-1)
 {
 }
 
 Server::~Server()
 {
+    /* add clean shutdown, add some signal intercepter at start server */
 }
-
-/* are :: necessary here ? */
 
 void Server::start(const std::size_t& p_port)
 {
@@ -95,6 +94,7 @@ void Server::start(const std::size_t& p_port)
                     return ; // exception perhaps
                 }
                 ::fcntl(connFd, F_SETFL, flags | O_NONBLOCK);
+                this->_clientIds[++this->_clientIdCounter] = connFd;
 
                 epoll_event cev;
                 cev.events = EPOLLIN | EPOLLET;
@@ -103,6 +103,7 @@ void Server::start(const std::size_t& p_port)
             }
             else if (events[i].events & EPOLLIN)
             {
+                /* integrate update here */
                 while (true)
                 {
                     ssize_t count = read(fd, buf, sizeof(buf));
@@ -123,4 +124,51 @@ void Server::start(const std::size_t& p_port)
             }
         }
     }
+}
+
+void Server::defineAction(const Message::Type& messageType, const std::function<void(long long& clientID, const Message& msg)>& action)
+{
+    this->_actions[messageType] = action;
+}
+
+void Server::sendTo(const Message& message, long long clientID)
+{
+    std::size_t messageLength = message.size();
+    ssize_t bytesSent = send(this->_clientIds[clientID], message.data(), sizeof(messageLength), 0);
+
+    if (bytesSent == 0)
+    {
+        std::cerr << "send: connection closed by peer" << std::endl;
+    }
+    if (bytesSent == -1)
+    {
+        throw std::system_error(errno, std::generic_category(), "send failed");
+    }
+    std::cout << "successfully sent: " <<  bytesSent << "bytes to client: " << clientID << std::endl;
+}
+
+void Server::sendToArray(const Message& message, std::vector<long long> clientIDs)
+{
+    for (auto clientId: clientIDs)
+    {
+        this->sendTo(message, clientId);
+    }
+}
+
+void Server::sendToAll(const Message& message)
+{
+    for (auto const[key, value]: this->_clientIds)
+    {
+        this->sendTo(message, key);
+    }
+}
+
+/* read little‑endian 16 bits */
+uint16_t read_le16(const std::vector<uint8_t>& buf)
+{
+    return static_cast<uint16_t>(buf[0]) | (static_cast<uint16_t>(buf[1]) << 8);
+}
+
+void Server::update()
+{
 }

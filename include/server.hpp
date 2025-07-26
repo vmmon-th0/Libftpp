@@ -20,7 +20,10 @@ class Server
 
     private:
         int _sockfd;
-        std::unordered_map<Message::Type, std::function<void(const Message&)>> _actions;
+        uint16_t _clientIdCounter;
+
+        std::unordered_map<long long, int> _clientIds;
+        std::unordered_map<Message::Type, std::function<void(long long&, const Message&)>> _actions;
 };
 
 #endif
