@@ -18,6 +18,7 @@ class Client
 
     private:
         int _sockfd;
+        std::unordered_map<int, std::list<Message>> _messagePool;
         std::unordered_map<Message::Type, std::function<void(const Message&)>> _actions;
 };
 

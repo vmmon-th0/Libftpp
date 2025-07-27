@@ -18,7 +18,7 @@ void Client::connect(const std::string& address, const std::size_t& port)
     this->_sockfd = ::socket(AF_INET, SOCK_STREAM, 0);
     if (this->_sockfd < 0)
     {
-        throw std::runtime_error("Failed to create socket");
+        throw std::system_error(errno, std::system_category(), "socket() failed");
     }
 
     int flags = fcntl(this->_sockfd, F_GETFL, 0);
@@ -30,7 +30,7 @@ void Client::connect(const std::string& address, const std::size_t& port)
     {
         ::close(this->_sockfd);
         this->_sockfd = -1;
-        throw std::invalid_argument("Invalid address: " + address);
+        throw std::system_error(errno, std::system_category(), "inet_pton() failed");
     }
 
     if (::connect(this->_sockfd, reinterpret_cast<sockaddr*>(&serv_addr), sizeof(serv_addr)) < 0)
@@ -39,7 +39,7 @@ void Client::connect(const std::string& address, const std::size_t& port)
         {
             ::close(this->_sockfd);
             this->_sockfd = -1;
-            throw std::runtime_error("Connection failed");
+            throw std::system_error(errno, std::system_category(), "connect() failed");
         }
     }
 }
@@ -71,7 +71,7 @@ void Client::send(const Message& message)
         ssize_t sent = ::send(this->_sockfd, dataPtr + totalSent, message.size() - totalSent, 0);
         if (sent < 0 && errno != EWOULDBLOCK && errno != EAGAIN)
         {
-            throw std::runtime_error("Send failed");
+            throw std::system_error(errno, std::system_category(), "send() failed");
         }
         if (sent > 0)
         {
@@ -92,10 +92,11 @@ void Client::update()
     {
         return;
     }
-    std::vector<uint8_t> buffer(4096);
+    std::vector<uint8_t> buffer(1500);
     ssize_t bytesRead = ::recv(this->_sockfd, buffer.data(), buffer.size(), 0);
     while (bytesRead > 0)
     {
+        buffer.resize(bytesRead);
         Message msg(read_le16(buffer));
         msg << buffer;
         auto it = this->_actions.find(msg.getType());
@@ -103,6 +104,15 @@ void Client::update()
         {
             it->second(msg);
         }
+        buffer.resize(1500);
         bytesRead = ::recv(this->_sockfd, buffer.data(), buffer.size(), 0);
+    }
+
+    if (bytesRead == 0) {
+        throw std::system_error(errno, std::generic_category(), "Server closed connection");
+    }
+
+    if (bytesRead < 0 && errno != EAGAIN && errno != EWOULDBLOCK) {
+        throw std::system_error(errno, std::generic_category(), "recv() failed on client socket");
     }
 }

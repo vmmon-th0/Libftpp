@@ -6,6 +6,7 @@
 #include <functional>
 #include <stdexcept>
 #include <vector>
+#include <list>
 #include <unistd.h>
 #include <fcntl.h>
 #include <arpa/inet.h>

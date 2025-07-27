@@ -1,5 +1,5 @@
 CXX	:= clang++
-CXXFLAGS := -Wall -Wextra -std=c++17 -I$(INCDIR) -c
+CXXFLAGS := -Wall -Wextra -std=c++20 -I$(INCDIR) -c
 
 LIBNAME := libmylib.a
 

@@ -15,14 +15,15 @@ class Server
         void sendTo(const Message& message, long long clientID);
         void sendToArray(const Message& message, std::vector<long long> clientIDs);
         void sendToAll(const Message& message);
-        /*if message is type of login, display every connected client + send to already connected clients a new client login with sendToArray / sendToAll*/
         void update();
 
     private:
         int _sockfd;
         uint16_t _clientIdCounter;
 
+        std::unordered_map<int, std::list<Message>> _messagePool;
         std::unordered_map<long long, int> _clientIds;
+        std::unordered_map<int, long long> _clientIdsReverse;
         std::unordered_map<Message::Type, std::function<void(long long&, const Message&)>> _actions;
 };
 
