@@ -1,158 +1,96 @@
-#ifndef IVECTOR_HPP
-#define IVECTOR_HPP
+#ifndef IVECTOR2_HPP
+#define IVECTOR2_HPP
 
 #include "mathematics.hpp"
 
 template<typename TType>
 struct IVector2
 {
-    virtual float length() const = 0;
-    virtual IVector2<float> normalize() const = 0;
-    virtual float dot(IVector2 const& vec) const = 0;
-    virtual IVector2 cross(IVector2 const& vec) const = 0;
-
-    virtual IVector2& operator+=(IVector2 const& vec) = 0;
-    virtual IVector2& operator-=(IVector2 const& vec) = 0;
-    virtual IVector2& operator*=(IVector2 const& vec) = 0;
-    virtual IVector2& operator/=(IVector2 const& vec) = 0;
-
-    virtual std::unique_ptr<IVector2> operator+(IVector2 const& vec) const = 0;
-    virtual std::unique_ptr<IVector2> operator-(IVector2 const& vec) const = 0;
-    virtual std::unique_ptr<IVector2> operator*(IVector2 const& vec) const = 0;
-    virtual std::unique_ptr<IVector2> operator/(IVector2 const& vec) const = 0;
-
-    virtual bool operator==(IVector2 const& vec) const = 0;
-    virtual bool operator!=(IVector2 const& vec) const = 0;
-
-    virtual ~IVector2() {}
-};
-
-template<typename TType>
-struct Vector2 : public IVector2<TType>
-{
     TType x;
     TType y;
 
-    Vector2(): x(0), y(0)
+    constexpr IVector2() noexcept: x(0), y(0)
     {
     }
 
-    Vector2(TType x, TType y): x(x), y(y)
+    constexpr IVector2(TType x, TType y) noexcept: x(x), y(y)
     {
     }
-
-    ~Vector2()
+    
+    constexpr float length() const noexcept
     {
+        return std::hypot(static_cast<float>(x), static_cast<float>(y));
     }
 
-    float length() const override
+    constexpr IVector2<float> normalize() const noexcept
     {
-        return std::sqrt(x*x + y*y);
-    }
-
-    std::unique_ptr<IVector2<float>> normalize() const override
-    {
-        float len = this->length();
+        float len = length();
         if (len == 0.f)
         {
-            return std::make_unique<Vector2<float>>(0.f, 0.f);
+            return IVector2<float>(0.f, 0.f);
         }
         float nx = static_cast<float>(x) / len;
         float ny = static_cast<float>(y) / len;
-        return std::make_unique<Vector2<float>>(nx, ny);
+        return IVector2<float>(nx, ny);
     }
 
-    float dot(IVector2<TType> const& vec) const override
+    constexpr float dot(const IVector2& vec) const noexcept
     {
-        const Vector2<TType>* vecPtr = dynamic_cast<const Vector2<TType>*>(&vec);
-        if (!vecPtr)
-        {
-            throw std::invalid_argument("Mismatched vector types");
-        }
-        return static_cast<float>(x * vecPtr->x + y * vecPtr->y);
+        return static_cast<float>(x) * static_cast<float>(vec.x) + static_cast<float>(y) * static_cast<float>(vec.y);
     }
 
-    std::unique_ptr<IVector2<TType>> cross() const override
+    constexpr IVector2<float> cross(IVector2 const& vec) const noexcept
     {
-        auto vecPtr = dynamic_cast<Vector2 const*>(&vec);
-        if (!vecPtr)
-        {
-            throw std::invalid_argument("Mismatched vector types");
-        }
-        return static_cast<float>(x * vecPtr->y - y * vecPtr->x);
+        return IVector2(-static_cast<float>(y), static_cast<float>(x));
     }
 
-    std::unique_ptr<IVector2<TType>> operator+=(IVector2 const& vec)
+    constexpr IVector2& operator+=(IVector2 const& vec) noexcept
     {
-        auto vecPtr = dynamic_cast<Vector2 const*>(&vec);
-        if (!vecPtr)
-        {
-            throw std::invalid_argument("Mismatched vector types");
-        }
-        this->x += vec.x;
-        this->y += vec.y;
+        x += vec.x;
+        y += vec.y;
         return *this;
     }
 
-    std::unique_ptr<IVector2<TType>> operator-=(IVector2 const& vec)
+    constexpr IVector2& operator-=(IVector2 const& vec) noexcept
     {
-        auto vecPtr = dynamic_cast<Vector2 const*>(&vec);
-        if (!vecPtr)
-        {
-            throw std::invalid_argument("Mismatched vector types");
-        }
-        this->x -= vec.x;
-        this->y -= vec.y;
+        x -= vec.x;
+        y -= vec.y;
         return *this;
     }
 
-    std::unique_ptr<IVector2<TType>> operator+(IVector2 const& vec)
+    constexpr IVector2 operator+(IVector2 const& vec) const noexcept
     {
-        auto vecPtr = dynamic_cast<Vector2 const*>(&vec);
-        if (!vecPtr)
-        {
-            throw std::invalid_argument("Mismatched vector types");
-        }
-        return std::make_unique(Vector2<float>(this->x + vec.x, this->y + vec.y));
+        return IVector2(x + vec.x, y + vec.y);
     }
 
-    std::unique_ptr<IVector2<TType>> operator-(IVector2 const& vec)
+    template<typename U>
+    constexpr IVector2<std::common_type_t<TType,U>> operator+(IVector2<U> const& o) const noexcept
     {
-        auto vecPtr = dynamic_cast<Vector2 const*>(&vec);
-        if (!vecPtr)
-        {
-            throw std::invalid_argument("Mismatched vector types");
-        }
-        return std::make_unique(Vector2<float>(this->x - vec.x, this->y - vec.y));
+        using R = std::common_type_t<TType,U>;
+        return IVector2<R>(static_cast<R>(x) + static_cast<R>(o.x), static_cast<R>(y) + static_cast<R>(o.y));
     }
 
-    std::unique_ptr<IVector2<TType>> operator*(IVector2 const& vec)
+    constexpr IVector2 operator-(IVector2 const& vec) const noexcept
     {
-        auto vecPtr = dynamic_cast<Vector2 const*>(&vec);
-        if (!vecPtr)
-        {
-            throw std::invalid_argument("Mismatched vector types");
-        }
-        return std::make_unique(Vector2<float>(this->x - vec.x, this->y - vec.y));
+        return IVector2(x - vec.x, y - vec.y);
     }
 
-    std::unique_ptr<IVector2<TType>> operator/(IVector2 const& vec)
+    constexpr IVector2 operator*(IVector2 const& vec) const noexcept
     {
-        auto vecPtr = dynamic_cast<Vector2 const*>(&vec);
-        if (!vecPtr)
-        {
-            throw std::invalid_argument("Mismatched vector types");
-        }
-        return std::make_unique(Vector2<float>(this->x / vecPtr.x, this->y / vecPtr.y));
+        return IVector2(x * vec.x, y * vec.y);
+    }
+
+    constexpr IVector2 operator/(IVector2 const& vec) const noexcept
+    {
+        return IVector2(x / vec.x, y / vec.y);
     }
     
-    bool operator ==(IVector2 const& vec)
+    constexpr bool operator ==(IVector2 const& vec) const noexcept
     {
-        auto vecPtr = dynamic_cast<Vector2 const*>(&vec);
-        return vecPtr && this->x == vec.x && this->y == vec.y;
+        return x == vec.x && y == vec.y;
     }
     
-    bool operator !=(IVector2 const& vec)
+    constexpr bool operator !=(IVector2 const& vec) const noexcept
     {
         return !(*this == vec);
     }
