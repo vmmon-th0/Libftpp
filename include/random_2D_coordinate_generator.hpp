@@ -18,13 +18,13 @@ class Random2DCoordinateGenerator
 {
     public:
         Random2DCoordinateGenerator();
-        Random2DCoordinateGenerator(uint_fast64_t seed);
+        Random2DCoordinateGenerator(int64_t seed);
 
         long long seed();
         long long operator()(const long long& x, const long long& y);
 
     private:
-        uint_fast64_t _seed;
+        int64_t _seed;
 };
 
 #endif
