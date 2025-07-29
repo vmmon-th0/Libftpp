@@ -5,5 +5,7 @@
 #include <cmath>
 #include <type_traits>
 #include <stdexcept>
+#include <random>
+#include <chrono>
 
 #endif
