@@ -6,9 +6,7 @@
 class ChronoMeter
 {
     public:
-        ChronoMeter() : _running(false)
-        {
-        }
+        ChronoMeter();
         ~ChronoMeter();
 
         void start();
