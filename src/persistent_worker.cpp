@@ -1,6 +1,7 @@
 #include "persistent_worker.hpp"
 
-PersistentWorker::PersistentWorker() : _running(true), _workerThread(std::thread(&PersistentWorker::_persistentLoop, this))
+PersistentWorker::PersistentWorker()
+    : _running(true), _workerThread(std::thread(&PersistentWorker::_persistentLoop, this))
 {
 }
 
@@ -14,14 +15,14 @@ PersistentWorker::~PersistentWorker()
     }
 }
 
-void PersistentWorker::addTask(const std::string& name, const std::function<void()>& jobToExecute)
+void PersistentWorker::addTask(const std::string &name, const std::function<void()> &jobToExecute)
 {
     std::lock_guard<std::mutex> lock(this->_mutex);
     this->_tasks[name] = jobToExecute;
     this->_cv.notify_one();
 }
 
-void PersistentWorker::removeTask(const std::string& name)
+void PersistentWorker::removeTask(const std::string &name)
 {
     std::lock_guard<std::mutex> lock(this->_mutex);
     this->_tasks.erase(name);
@@ -36,17 +37,17 @@ void PersistentWorker::_persistentLoop()
             std::unique_lock<std::mutex> lock(this->_mutex);
             if (this->_tasks.empty())
             {
-                this->_cv.wait_for(lock, std::chrono::milliseconds(10), 
-                   [this]{ return !this->_tasks.empty() || !this->_running; });
+                this->_cv.wait_for(lock, std::chrono::milliseconds(10),
+                                   [this] { return !this->_tasks.empty() || !this->_running; });
             }
 
-            for (const auto& task : this->_tasks)
+            for (const auto &task : this->_tasks)
             {
                 tasksToRun.push_back(task.second);
             }
         }
 
-        for (const auto& task : tasksToRun)
+        for (const auto &task : tasksToRun)
         {
             try
             {

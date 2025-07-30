@@ -13,4 +13,3 @@ void Square::setHeight(double h)
 {
     width = height = h;
 }
-

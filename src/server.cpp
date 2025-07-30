@@ -1,6 +1,6 @@
 #include "server.hpp"
 
-Server::Server(): _sockfd(-1)
+Server::Server() : _sockfd(-1)
 {
 }
 
@@ -9,7 +9,7 @@ Server::~Server()
     /* add clean shutdown, add some signal intercepter at start server */
 }
 
-void Server::start(const std::size_t& p_port)
+void Server::start(const std::size_t &p_port)
 {
     this->_sockfd = ::socket(AF_INET, SOCK_STREAM, 0);
     if (this->_sockfd < 0)
@@ -24,7 +24,7 @@ void Server::start(const std::size_t& p_port)
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = INADDR_ANY;
     addr.sin_port = htons(p_port);
-    if (::bind(this->_sockfd, (sockaddr*)&addr, sizeof(addr)) < 0)
+    if (::bind(this->_sockfd, (sockaddr *)&addr, sizeof(addr)) < 0)
     {
         ::close(this->_sockfd);
         throw std::system_error(errno, std::generic_category(), "bind failed");
@@ -77,7 +77,7 @@ void Server::start(const std::size_t& p_port)
             {
                 sockaddr_in clientAddr;
                 socklen_t clientLen = sizeof(clientAddr);
-                int connFd = accept(this->_sockfd, (sockaddr*)&clientAddr, &clientLen);
+                int connFd = accept(this->_sockfd, (sockaddr *)&clientAddr, &clientLen);
                 if (connFd < 0)
                 {
                     std::cerr << "accept failed: " << std::strerror(errno) << std::endl;
@@ -105,7 +105,8 @@ void Server::start(const std::size_t& p_port)
             {
                 while (true)
                 {
-                    ssize_t bytesRead = ::recv(fd, buffer.data(), buffer.size(), 0);;
+                    ssize_t bytesRead = ::recv(fd, buffer.data(), buffer.size(), 0);
+                    ;
                     if (bytesRead == -1)
                     {
                         std::cerr << "recv failed: " << std::strerror(errno);
@@ -131,12 +132,13 @@ void Server::start(const std::size_t& p_port)
     }
 }
 
-void Server::defineAction(const Message::Type& messageType, const std::function<void(long long& clientID, const Message& msg)>& action)
+void Server::defineAction(const Message::Type &messageType,
+                          const std::function<void(long long &clientID, const Message &msg)> &action)
 {
     this->_actions[messageType] = action;
 }
 
-void Server::sendTo(const Message& message, long long clientID)
+void Server::sendTo(const Message &message, long long clientID)
 {
     std::size_t messageLength = message.size();
     ssize_t bytesSent = send(this->_clientIdsReverse[clientID], message.data(), sizeof(messageLength), 0);
@@ -144,33 +146,33 @@ void Server::sendTo(const Message& message, long long clientID)
     if (bytesSent == 0)
     {
         std::cerr << "send: connection closed by peer" << std::endl;
-        return ;
+        return;
     }
     if (bytesSent == -1)
     {
         throw std::system_error(errno, std::generic_category(), "send failed");
     }
-    std::cout << "successfully sent: " <<  bytesSent << "bytes to client: " << clientID << std::endl;
+    std::cout << "successfully sent: " << bytesSent << "bytes to client: " << clientID << std::endl;
 }
 
-void Server::sendToArray(const Message& message, std::vector<long long> clientIDs)
+void Server::sendToArray(const Message &message, std::vector<long long> clientIDs)
 {
-    for (auto clientId: clientIDs)
+    for (auto clientId : clientIDs)
     {
         this->sendTo(message, clientId);
     }
 }
 
-void Server::sendToAll(const Message& message)
+void Server::sendToAll(const Message &message)
 {
-    for (auto const[key, value]: this->_clientIds)
+    for (auto const [key, value] : this->_clientIds)
     {
         this->sendTo(message, key);
     }
 }
 
 /* read little‑endian 16 bits */
-uint16_t read_le16(const std::vector<uint8_t>& buffer)
+uint16_t read_le16(const std::vector<uint8_t> &buffer)
 {
     return static_cast<uint16_t>(buffer[0]) | (static_cast<uint16_t>(buffer[1]) << 8);
 }
@@ -181,9 +183,9 @@ void Server::update()
     messageToProcess = std::move(this->_messagePool);
     this->_messagePool.clear();
 
-    for (auto const&[key, value]: messageToProcess)
+    for (auto const &[key, value] : messageToProcess)
     {
-        for (Message const& message: value)
+        for (Message const &message : value)
         {
             auto it = this->_actions.find(message.getType());
             it->second(this->_clientIdsReverse[it->first], message);

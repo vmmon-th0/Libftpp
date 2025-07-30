@@ -16,14 +16,15 @@ WorkerPool::~WorkerPool()
         this->_stopFlag = true;
     }
     this->_shutdownCondition.notify_all();
-    
-    for (auto& worker : this->_workers)
+
+    for (auto &worker : this->_workers)
     {
-        if (worker.joinable()) worker.join();
+        if (worker.joinable())
+            worker.join();
     }
 }
 
-void WorkerPool::addJob(const std::function<void()>& jobToExecute)
+void WorkerPool::addJob(const std::function<void()> &jobToExecute)
 {
     std::lock_guard<std::mutex> lock(this->_mutex);
     if (this->_stopFlag)
@@ -36,18 +37,15 @@ void WorkerPool::addJob(const std::function<void()>& jobToExecute)
 
 void WorkerPool::addJob(std::unique_ptr<IJob> job)
 {
-    addJob([capturedJob = std::move(job)]() mutable {
-        capturedJob->execute();
-    });
+    addJob([capturedJob = std::move(job)]() mutable { capturedJob->execute(); });
 }
 
 void WorkerPool::workerLoop()
 {
-    while (true) {
+    while (true)
+    {
         std::unique_lock<std::mutex> lock(this->_mutex);
-        this->_shutdownCondition.wait(lock, [this] {
-            return !this->_jobQueue.empty() || this->_stopFlag;
-        });
+        this->_shutdownCondition.wait(lock, [this] { return !this->_jobQueue.empty() || this->_stopFlag; });
 
         if (this->_stopFlag && this->_jobQueue.empty())
         {
@@ -60,7 +58,7 @@ void WorkerPool::workerLoop()
         {
             job = this->_jobQueue.pop_front();
         }
-        catch (const std::runtime_error& e)
+        catch (const std::runtime_error &e)
         {
             continue;
         }

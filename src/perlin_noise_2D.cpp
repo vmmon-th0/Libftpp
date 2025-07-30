@@ -1,6 +1,6 @@
 #include "perlin_noise_2D.hpp"
 
-PerlinNoise2D::PerlinNoise2D(int64_t seed): _pnrg(seed)
+PerlinNoise2D::PerlinNoise2D(int64_t seed) : _pnrg(seed)
 {
 }
 
@@ -8,10 +8,7 @@ PerlinNoise2D::~PerlinNoise2D()
 {
 }
 
-float sample(int x, int y)
-{
-    return this->_pnrg(x, y)
-}
+float sample(int x, int y){return this -> _pnrg(x, y)}
 
 IVector2<float> randomGradient(int ix, int iy)
 {

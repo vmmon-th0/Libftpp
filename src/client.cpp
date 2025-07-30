@@ -1,6 +1,6 @@
 #include "client.hpp"
 
-Client::Client(): _sockfd(-1)
+Client::Client() : _sockfd(-1)
 {
 }
 
@@ -9,7 +9,7 @@ Client::~Client()
     disconnect();
 }
 
-void Client::connect(const std::string& address, const std::size_t& port)
+void Client::connect(const std::string &address, const std::size_t &port)
 {
     if (this->_sockfd != -1)
     {
@@ -33,7 +33,7 @@ void Client::connect(const std::string& address, const std::size_t& port)
         throw std::system_error(errno, std::system_category(), "inet_pton() failed");
     }
 
-    if (::connect(this->_sockfd, reinterpret_cast<sockaddr*>(&serv_addr), sizeof(serv_addr)) < 0)
+    if (::connect(this->_sockfd, reinterpret_cast<sockaddr *>(&serv_addr), sizeof(serv_addr)) < 0)
     {
         if (errno != EINPROGRESS)
         {
@@ -53,18 +53,18 @@ void Client::disconnect()
     }
 }
 
-void Client::defineAction(Message::Type messageType, const std::function<void(const Message&)>& action)
+void Client::defineAction(Message::Type messageType, const std::function<void(const Message &)> &action)
 {
     this->_actions[messageType] = action;
 }
 
-void Client::send(const Message& message)
+void Client::send(const Message &message)
 {
     if (this->_sockfd < 0)
     {
         throw std::runtime_error("Not connected");
     }
-    const std::uint8_t* dataPtr = message.data();
+    const std::uint8_t *dataPtr = message.data();
     std::size_t totalSent = 0;
     while (totalSent < message.size())
     {
@@ -81,7 +81,7 @@ void Client::send(const Message& message)
 }
 
 /* read little‑endian 16 bits */
-uint16_t read_le16(const std::vector<uint8_t>& buf)
+uint16_t read_le16(const std::vector<uint8_t> &buf)
 {
     return static_cast<uint16_t>(buf[0]) | (static_cast<uint16_t>(buf[1]) << 8);
 }
@@ -108,11 +108,13 @@ void Client::update()
         bytesRead = ::recv(this->_sockfd, buffer.data(), buffer.size(), 0);
     }
 
-    if (bytesRead == 0) {
+    if (bytesRead == 0)
+    {
         throw std::system_error(errno, std::generic_category(), "Server closed connection");
     }
 
-    if (bytesRead < 0 && errno != EAGAIN && errno != EWOULDBLOCK) {
+    if (bytesRead < 0 && errno != EAGAIN && errno != EWOULDBLOCK)
+    {
         throw std::system_error(errno, std::generic_category(), "recv() failed on client socket");
     }
 }

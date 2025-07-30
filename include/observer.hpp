@@ -3,16 +3,15 @@
 
 #include "design_patterns.hpp"
 
-template<typename TEvent>
-class Observer
+template <typename TEvent> class Observer
 {
     public:
-        void subscribe(const TEvent& event, const std::function<void()>& callback)
+        void subscribe(const TEvent &event, const std::function<void()> &callback)
         {
             this->_callbacks[event].push_back(callback);
         }
 
-        void notify(const TEvent& event)
+        void notify(const TEvent &event)
         {
             auto it = this->_callbacks.find(event);
             if (it == this->_callbacks.end())
@@ -20,7 +19,7 @@ class Observer
                 return;
             }
             auto eventCallbacks = it->second;
-            for (const auto& callback : eventCallbacks)
+            for (const auto &callback : eventCallbacks)
             {
                 callback();
             }

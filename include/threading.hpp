@@ -1,13 +1,9 @@
 #ifndef THREADING_HPP
 #define THREADING_HPP
 
-#include <deque>
-#include <mutex>
-#include <atomic>
-#include <thread>
-#include <sstream>
-#include <iostream>
-#include <functional>
-#include <condition_variable>
+#include "persistent_worker.hpp"
+#include "thread.hpp"
+#include "thread_safe_queue.hpp"
+#include "worker_pool.hpp"
 
 #endif

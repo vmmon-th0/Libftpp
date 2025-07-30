@@ -1,6 +1,6 @@
 #include "thread.hpp"
 
-Thread::Thread(const std::string& name, std::function<void()> funcToExecute): _identifier(name), _task(funcToExecute)
+Thread::Thread(const std::string &name, std::function<void()> funcToExecute) : _identifier(name), _task(funcToExecute)
 {
 }
 
@@ -15,7 +15,7 @@ void Thread::start()
     if (!this->_thread.joinable())
     {
         this->_thread = std::thread(this->_task, this->_identifier);
-        return ;
+        return;
     }
     std::ostringstream errStr;
     errStr << "Thread id: " << this->_thread.get_id() << " is already instantiated";
@@ -27,7 +27,7 @@ void Thread::stop()
     if (this->_thread.joinable())
     {
         this->_thread.join();
-        return ;
+        return;
     }
     std::ostringstream errStr;
     errStr << "Thread id: " << this->_thread.get_id() << " is not joinable";

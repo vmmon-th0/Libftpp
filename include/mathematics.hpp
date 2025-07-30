@@ -1,11 +1,9 @@
 #ifndef MATHEMATICS_HPP
 #define MATHEMATICS_HPP
 
-#include <memory>
-#include <cmath>
-#include <type_traits>
-#include <stdexcept>
-#include <random>
-#include <chrono>
+#include "ivector2.hpp"
+#include "ivector3.hpp"
+#include "perlin_noise_2D.hpp"
+#include "random_2D_coordinate_generator.hpp"
 
 #endif

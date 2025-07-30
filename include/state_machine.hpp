@@ -3,32 +3,31 @@
 
 #include "design_patterns.hpp"
 
-template<typename TState>
-class StateMachine
+template <typename TState> class StateMachine
 {
     public:
         StateMachine() = default;
         ~StateMachine() = default;
 
-        void addState(const TState& state)
+        void addState(const TState &state)
         {
             _states.insert(state);
         }
 
-        void addTransition(const TState& startState, const TState& endState, const std::function<void()>& action)
+        void addTransition(const TState &startState, const TState &endState, const std::function<void()> &action)
         {
             ensureStateExists(startState);
             ensureStateExists(endState);
             _transitions[{startState, endState}] = action;
         }
 
-        void addAction(const TState& state, const std::function<void()>& action)
+        void addAction(const TState &state, const std::function<void()> &action)
         {
             ensureStateExists(state);
             _actions[state] = action;
         }
 
-        void setInitialState(const TState& state)
+        void setInitialState(const TState &state)
         {
             ensureStateExists(state);
             _currentState = state;
@@ -43,7 +42,7 @@ class StateMachine
             return *_currentState;
         }
 
-        void transitionTo(const TState& nextState)
+        void transitionTo(const TState &nextState)
         {
             if (!_currentState)
             {
@@ -80,7 +79,7 @@ class StateMachine
         }
 
     private:
-        void ensureStateExists(const TState& state) const
+        void ensureStateExists(const TState &state) const
         {
             if (_states.find(state) == _states.end())
             {

@@ -1,9 +1,9 @@
 #ifndef DESIGN_PATTERNS_HPP
 #define DESIGN_PATTERNS_HPP
 
-#include <any>
-#include <map>
-#include <cstdint>
-#include <iostream>
+#include "memento.hpp"
+#include "observer.hpp"
+#include "singleton.hpp"
+#include "state_machine.hpp"
 
 #endif

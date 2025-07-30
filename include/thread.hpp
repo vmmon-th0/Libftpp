@@ -1,13 +1,14 @@
 #ifndef THREAD_HPP
 #define THREAD_HPP
 
-#include "threading.hpp"
 #include "thread_safe_iostream.hpp"
+#include <functional>
+#include <thread>
 
 class Thread
 {
     public:
-        Thread(const std::string& name, std::function<void()> funcToExecute);
+        Thread(const std::string &name, std::function<void()> funcToExecute);
         ~Thread();
 
         void start();

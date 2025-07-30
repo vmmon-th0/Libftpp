@@ -1,8 +1,8 @@
 #ifndef WORKER_POOL_HPP
 #define WORKER_POOL_HPP
 
-#include "threading.hpp"
 #include "thread_safe_queue.hpp"
+#include <condition_variable>
 
 class WorkerPool
 {
@@ -17,7 +17,7 @@ class WorkerPool
         explicit WorkerPool(std::size_t nbThreads = std::thread::hardware_concurrency());
         ~WorkerPool();
 
-        void addJob(const std::function<void()>& jobToExecute);
+        void addJob(const std::function<void()> &jobToExecute);
         void addJob(std::unique_ptr<IJob> job);
 
     private:

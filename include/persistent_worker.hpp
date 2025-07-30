@@ -1,7 +1,12 @@
 #ifndef PERSISTENT_WORKER_HPP
 #define PERSISTENT_WORKER_HPP
 
-#include "threading.hpp"
+#include <atomic>
+#include <condition_variable>
+#include <functional>
+#include <string>
+#include <thread>
+#include <unordered_map>
 
 class PersistentWorker
 {
@@ -9,11 +14,11 @@ class PersistentWorker
         PersistentWorker();
         ~PersistentWorker();
 
-        void addTask(const std::string& name, const std::function<void()>& jobToExecute);
-        void removeTask(const std::string& name);
-        
-        PersistentWorker(const PersistentWorker&) = delete;
-        PersistentWorker& operator=(const PersistentWorker&) = delete;
+        void addTask(const std::string &name, const std::function<void()> &jobToExecute);
+        void removeTask(const std::string &name);
+
+        PersistentWorker(const PersistentWorker &) = delete;
+        PersistentWorker &operator=(const PersistentWorker &) = delete;
 
     private:
         void _persistentLoop();

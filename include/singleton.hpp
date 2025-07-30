@@ -3,11 +3,10 @@
 
 #include "design_patterns.hpp"
 
-template<typename TType>
-class Singleton
+template <typename TType> class Singleton
 {
     public:
-        static TType* instance()
+        static TType *instance()
         {
             if (!_instance)
             {
@@ -16,8 +15,7 @@ class Singleton
             return _instance;
         }
 
-        template<typename ... TArgs>
-        static void instantiate(TArgs&& ... args)
+        template <typename... TArgs> static void instantiate(TArgs &&...args)
         {
             if (_instance)
             {
@@ -27,10 +25,9 @@ class Singleton
         }
 
     private:
-        static TType* _instance;
+        static TType *_instance;
 };
 
-template<typename TType>
-TType* Singleton<TType>::_instance = nullptr;
+template <typename TType> TType *Singleton<TType>::_instance = nullptr;
 
 #endif
