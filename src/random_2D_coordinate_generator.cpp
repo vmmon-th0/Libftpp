@@ -1,10 +1,10 @@
-#include "random_2D_coordinate_generator.hpp"
+#include "../include/random_2D_coordinate_generator.hpp"
 
 Random2DCoordinateGenerator::Random2DCoordinateGenerator(): _seed(std::chrono::steady_clock::now().time_since_epoch().count())
 {
 }
 
-Random2DCoordinateGenerator::Random2DCoordinateGenerator(uint_fast64_t seed):_seed(seed)
+Random2DCoordinateGenerator::Random2DCoordinateGenerator(int64_t seed):_seed(seed)
 {
 }
 
