@@ -3,6 +3,7 @@
 
 #include "thread_safe_queue.hpp"
 #include <condition_variable>
+#include <thread>
 
 class WorkerPool
 {

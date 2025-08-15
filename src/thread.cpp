@@ -1,6 +1,6 @@
 #include "thread.hpp"
 
-Thread::Thread(const std::string &name, std::function<void()> funcToExecute) : _identifier(name), _task(funcToExecute)
+Thread::Thread(const std::string &name, std::function<void()> func) : _identifier(name), _task(func)
 {
 }
 
@@ -14,7 +14,7 @@ void Thread::start()
 {
     if (!this->_thread.joinable())
     {
-        this->_thread = std::thread(this->_task, this->_identifier);
+        this->_thread = std::thread(this->_task);
         return;
     }
     std::ostringstream errStr;

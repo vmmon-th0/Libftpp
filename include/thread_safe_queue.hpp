@@ -1,7 +1,10 @@
 #ifndef THREAD_SAFE_QUEUE_HPP
 #define THREAD_SAFE_QUEUE_HPP
 
-#include "threading.hpp"
+#include <deque>
+#include <mutex>
+#include <functional>
+#include <system_error>
 
 template <typename TType> class ThreadSafeQueue
 {
@@ -9,14 +12,14 @@ template <typename TType> class ThreadSafeQueue
         ThreadSafeQueue() = default;
         ~ThreadSafeQueue() = default;
 
-        template <typename U, typename = typename std::enable_if<std::is_constructible<TType, U &&>::value>::type>
+        template <typename U>//, typename = typename std::enable_if<std::is_constructible<TType, U &&>::value>::type>
         void push_back(U &&newElement)
         {
             std::lock_guard<std::mutex> lock(this->_mutex);
             this->_queue.push_back(std::forward<U>(newElement));
         }
 
-        template <typename U, typename = typename std::enable_if<std::is_constructible<TType, U &&>::value>::type>
+        template <typename U>//, typename = typename std::enable_if<std::is_constructible<TType, U &&>::value>::type>
         void push_front(U &&newElement)
         {
             std::lock_guard<std::mutex> lock(this->_mutex);

@@ -9,8 +9,13 @@ class Message
         using Type = int;
 
         explicit Message(Type t);
+        ~Message();
 
         Type getType() const noexcept;
+
+        void reset();
+        std::size_t size() const;
+        const std::uint8_t* data() const;
 
         template <typename T> Message &operator<<(const T &val)
         {
@@ -22,21 +27,6 @@ class Message
         {
             _buffer >> val;
             return *this;
-        }
-
-        void reset()
-        {
-            _buffer.reset();
-        }
-
-        std::size_t size() const
-        {
-            return _buffer.size();
-        }
-
-        const std::uint8_t *data() const
-        {
-            return _buffer.rawData().data();
         }
 
     private:

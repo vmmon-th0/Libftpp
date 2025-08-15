@@ -6,7 +6,7 @@
 class Timer
 {
     public:
-        Timer() : _duration(std::chrono::steady_clock::duration::zero()), _start(std::chrono::steady_clock::now());
+        Timer();
         ~Timer();
 
         void start(std::chrono::steady_clock::duration d);

@@ -4,6 +4,7 @@
 #include <any>
 #include <cstdint>
 #include <map>
+#include <iostream>
 #include <string>
 
 class Memento

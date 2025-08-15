@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <sstream>
+#include <iostream>
 
 class ThreadSafeIostream
 {

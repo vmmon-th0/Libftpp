@@ -1,6 +1,6 @@
 #include "rectangle.hpp"
 
-Rectangle::Rectangle(double w = 0, double h = 0) : width(w), height(h)
+constexpr Rectangle::Rectangle(double w, double h) : width(w), height(h)
 {
 }
 
@@ -16,17 +16,17 @@ void Rectangle::setHeight(double h)
     height = h;
 }
 
-double Rectangle::getWidth() const
+constexpr double Rectangle::getWidth() const
 {
     return width;
 }
 
-double Rectangle::getHeight() const
+constexpr double Rectangle::getHeight() const
 {
     return height;
 }
 
-double Rectangle::area() const
+constexpr double Rectangle::area() const
 {
     return width * height;
 }

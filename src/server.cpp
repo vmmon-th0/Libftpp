@@ -172,7 +172,7 @@ void Server::sendToAll(const Message &message)
 }
 
 /* read little‑endian 16 bits */
-uint16_t read_le16(const std::vector<uint8_t> &buffer)
+uint16_t Server::read_le16(const std::vector<uint8_t> &buffer)
 {
     return static_cast<uint16_t>(buffer[0]) | (static_cast<uint16_t>(buffer[1]) << 8);
 }

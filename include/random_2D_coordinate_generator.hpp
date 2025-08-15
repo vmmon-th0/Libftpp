@@ -1,7 +1,7 @@
 #ifndef RANDOM_2D_COORDINATE_GENERATOR_HPP
 #define RANDOM_2D_COORDINATE_GENERATOR_HPP
 
-#include "mathematics.hpp"
+#include <chrono>
 
 // The Random2DCoordinateGenerator class implement a pseudorandom number generator (PRNG), also known as a deterministic
 // random bit generator (DRBG). Its model consists of generating pseudo-random numbers based on 2D coordinates.

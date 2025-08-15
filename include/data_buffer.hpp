@@ -1,7 +1,12 @@
 #ifndef DATA_BUFFER_HPP
 #define DATA_BUFFER_HPP
 
-#include "data_structures.hpp"
+#include <cstdint>
+#include <cstring>
+#include <stdexcept>
+#include <string>
+#include <type_traits>
+#include <vector>
 
 class DataBuffer
 {
@@ -21,6 +26,9 @@ class DataBuffer
         DataBuffer &operator<<(const std::string &str);
         DataBuffer &operator<<(const char *str);
         DataBuffer &operator>>(std::string &str);
+
+        DataBuffer &operator>>(std::vector<std::uint8_t> &vec);
+        DataBuffer &operator<<(const std::vector<std::uint8_t> &vec);
 
         const std::vector<std::uint8_t> &rawData() const noexcept;
 

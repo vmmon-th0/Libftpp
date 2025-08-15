@@ -10,6 +10,7 @@
 #include <functional>
 #include <list>
 #include <memory>
+#include <iostream>
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <system_error>
@@ -29,6 +30,7 @@ class Server
         void sendToArray(const Message &message, std::vector<long long> clientIDs);
         void sendToAll(const Message &message);
         void update();
+        uint16_t read_le16(const std::vector<uint8_t> &buffer);
 
     private:
         int _sockfd;

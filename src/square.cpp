@@ -1,6 +1,6 @@
 #include "square.hpp"
 
-Square::Square(double size = 0) : Rectangle(size, size)
+constexpr Square::Square(double size) : Rectangle(size, size)
 {
 }
 

@@ -1,11 +1,11 @@
-CXX	:= clang++
-CXXFLAGS := -Wall -Wextra -std=c++20 -I$(INCDIR) -c
-
-LIBNAME := libmylib.a
-
 SRCDIR := src
 INCDIR := include
 OBJDIR := obj
+
+CXX	:= clang++
+CXXFLAGS := -Wall -Wextra -std=c++20 -I$(INCDIR) -c
+
+LIBNAME := mylib.a
 
 SRCS := $(wildcard $(SRCDIR)/*.cpp)
 HDRS := $(wildcard $(INCDIR)/*.hpp)

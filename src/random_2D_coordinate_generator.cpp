@@ -1,4 +1,4 @@
-#include "../include/random_2D_coordinate_generator.hpp"
+#include "random_2D_coordinate_generator.hpp"
 
 Random2DCoordinateGenerator::Random2DCoordinateGenerator()
     : _seed(std::chrono::steady_clock::now().time_since_epoch().count())

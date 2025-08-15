@@ -8,7 +8,7 @@
 class Thread
 {
     public:
-        Thread(const std::string &name, std::function<void()> funcToExecute);
+        Thread(const std::string &name, std::function<void()> func);
         ~Thread();
 
         void start();

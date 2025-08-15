@@ -13,3 +13,18 @@ Message::Type Message::getType() const noexcept
 {
     return this->_type;
 }
+
+void Message::reset()
+{
+    this->_buffer.reset();
+}
+
+std::size_t Message::size() const
+{
+    return this->_buffer.size();
+}
+
+const std::uint8_t* Message::data() const
+{
+    return this->_buffer.rawData().data();
+}

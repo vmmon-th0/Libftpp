@@ -1,7 +1,8 @@
 #ifndef IVECTOR2_HPP
 #define IVECTOR2_HPP
 
-#include "mathematics.hpp"
+#include <cmath>
+#include <type_traits>
 
 template <typename TType> struct IVector2
 {
