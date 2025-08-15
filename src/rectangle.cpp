@@ -1,6 +1,6 @@
 #include "rectangle.hpp"
 
-constexpr Rectangle::Rectangle(double w, double h) : width(w), height(h)
+Rectangle::Rectangle(double w, double h) : width(w), height(h)
 {
 }
 

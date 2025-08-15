@@ -5,7 +5,7 @@ WorkerPool::WorkerPool(size_t numThreads)
     this->_workers.reserve(numThreads);
     for (size_t i = 0; i < numThreads; ++i)
     {
-        this->_workers.emplace_back(&WorkerPool::workerLoop, this);
+        this->_workers.emplace_back(&WorkerPool::_workerLoop, this);
     }
 }
 
@@ -35,12 +35,12 @@ void WorkerPool::addJob(const std::function<void()> &jobToExecute)
     this->_shutdownCondition.notify_one();
 }
 
-void WorkerPool::addJob(std::unique_ptr<IJob> job)
-{
-    addJob([capturedJob = std::move(job)]() mutable { capturedJob->execute(); });
-}
+// void WorkerPool::addJob(std::unique_ptr<IJob> job)
+// {
+//     addJob([capturedJob = std::move(job)]() mutable { capturedJob->execute(); });
+// }
 
-void WorkerPool::workerLoop()
+void WorkerPool::_workerLoop()
 {
     while (true)
     {

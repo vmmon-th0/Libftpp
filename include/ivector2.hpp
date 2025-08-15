@@ -42,6 +42,7 @@ template <typename TType> struct IVector2
 
         constexpr IVector2<float> cross(IVector2 const &vec) const noexcept
         {
+            (void)vec;
             return IVector2(-static_cast<float>(y), static_cast<float>(x));
         }
 

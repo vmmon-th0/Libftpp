@@ -1,29 +1,47 @@
-SRCDIR := src
-INCDIR := include
-OBJDIR := obj
+SRC_DIR := src
+INC_DIR := include
+
+OBJ_DIR := obj
+OBJ_DIR_TEST := obj_test
+ 
+TEST_DIR := test
+BUILD_DIR := build
 
 CXX	:= clang++
-CXXFLAGS := -Wall -Wextra -std=c++20 -I$(INCDIR) -c
 
-LIBNAME := mylib.a
+CXXFLAGS := -Wall -Wextra -std=c++20 -I$(INC_DIR) -c
+CXXFLAGS_TEST := -Wall -Wextra -std=c++20 -I$(INC_DIR)
 
-SRCS := $(wildcard $(SRCDIR)/*.cpp)
-HDRS := $(wildcard $(INCDIR)/*.hpp)
-OBJS := $(SRCS:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
+LIB_NAME := mylib.a
 
-all: $(LIBNAME)
+HDRS := $(wildcard $(INC_DIR)/*.hpp)
 
-$(LIBNAME): $(OBJS)
+SRCS := $(wildcard $(SRC_DIR)/*.cpp)
+OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+
+SRCS_TEST := $(wildcard $(TEST_DIR)/*.cpp)
+
+TEST_BINS := $(SRCS_TEST:$(TEST_DIR)/%.cpp=$(BUILD_DIR)/%)
+
+all: $(LIB_NAME)
+
+$(LIB_NAME): $(OBJS) $(HDRS)
 	ar rcs $@ $^
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $< -o $@
 
 format:
 	clang-format -i -style='{BasedOnStyle: Microsoft, IndentAccessModifiers: true, AccessModifierOffset: 0, IndentWidth: 4}' $(SRCS) $(HDRS)
 
-clean:
-	rm -rf $(OBJDIR) $(LIBNAME)
+$(BUILD_DIR)/%: $(TEST_DIR)/%.cpp $(LIB_NAME)
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS_TEST) $< -L. -l:$(LIB_NAME) -o $@
 
-.PHONY: all clean
+test: $(TEST_BINS)
+
+clean:
+	rm -rf $(OBJ_DIR) $(OBJ_DIR_TEST) $(BUILD_DIR) $(LIB_NAME)
+
+.PHONY: all clean format test

@@ -28,7 +28,7 @@ class Memento
         Snapshot save();
         void load(const Memento::Snapshot &state);
 
-        virtual void _saveToSnapshot(Memento::Snapshot &snapshot) = 0;
+        virtual void _saveToSnapshot(Memento::Snapshot &snapshot) const = 0;
         virtual void _loadFromSnapshot(const Memento::Snapshot &snapshot) = 0;
 };
 
@@ -43,7 +43,7 @@ class MainCharacter : public Memento
         uint16_t getXp() const;
 
     private:
-        void _saveToSnapshot(Memento::Snapshot &snapshot) override;
+        void _saveToSnapshot(Memento::Snapshot &snapshot) const override;
         void _loadFromSnapshot(const Memento::Snapshot &snapshot) override;
 
         static inline const std::string KEY_XP = "xp";

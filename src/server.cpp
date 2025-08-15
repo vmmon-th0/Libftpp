@@ -165,7 +165,7 @@ void Server::sendToArray(const Message &message, std::vector<long long> clientID
 
 void Server::sendToAll(const Message &message)
 {
-    for (auto const [key, value] : this->_clientIds)
+    for (auto const &[key, value] : this->_clientIds)
     {
         this->sendTo(message, key);
     }

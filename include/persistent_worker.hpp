@@ -23,8 +23,8 @@ class PersistentWorker
     private:
         void _persistentLoop();
         std::mutex _mutex;
-        std::thread _workerThread;
         std::atomic<bool> _running;
+        std::thread _workerThread;
         std::condition_variable _cv;
         std::unordered_map<std::string, std::function<void()>> _tasks;
 };

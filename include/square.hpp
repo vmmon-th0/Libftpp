@@ -6,7 +6,7 @@
 class Square : public Rectangle
 {
     public:
-        constexpr explicit Square(double size = 0);
+        explicit Square(double size = 0);
 
         void setWidth(double w) override;
         void setHeight(double h) override;

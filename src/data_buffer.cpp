@@ -44,3 +44,31 @@ DataBuffer &DataBuffer::operator>>(std::vector<std::uint8_t> &vec)
     _read_pos += size;
     return *this;
 }
+
+DataBuffer &DataBuffer::operator<<(const std::string &str)
+{
+    *this << static_cast<std::uint32_t>(str.size());
+    _buffer.insert(_buffer.end(), str.begin(), str.end());
+    return *this;
+}
+
+DataBuffer &DataBuffer::operator<<(const char *str)
+{
+    return *this << std::string(str);
+}
+
+DataBuffer &DataBuffer::operator>>(std::string &str)
+{
+    std::uint32_t size = 0;
+    // On lit d'abord la taille
+    *this >> size;
+
+    if (_read_pos + size > _buffer.size())
+    {
+        throw std::out_of_range("Not enough data in buffer");
+    }
+
+    str.assign(reinterpret_cast<const char*>(_buffer.data() + _read_pos), size);
+    _read_pos += size;
+    return *this;
+}

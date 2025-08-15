@@ -4,6 +4,7 @@
 #include "thread_safe_queue.hpp"
 #include <condition_variable>
 #include <thread>
+#include <vector>
 
 class WorkerPool
 {
@@ -19,10 +20,10 @@ class WorkerPool
         ~WorkerPool();
 
         void addJob(const std::function<void()> &jobToExecute);
-        void addJob(std::unique_ptr<IJob> job);
+        // void addJob(std::unique_ptr<IJob> job);
 
     private:
-        void workerLoop();
+        void _workerLoop();
         bool _stopFlag = false;
         std::mutex _mutex;
         std::condition_variable _shutdownCondition;

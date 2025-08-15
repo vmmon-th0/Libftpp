@@ -4,7 +4,7 @@
 class Rectangle
 {
     public:
-        constexpr explicit Rectangle(double w = 0, double h = 0);
+        explicit Rectangle(double w = 0, double h = 0);
         virtual ~Rectangle();
 
         virtual void setWidth(double w);

@@ -4,6 +4,7 @@
 #include <mutex>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 
 class ThreadSafeIostream
 {
