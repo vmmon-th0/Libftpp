@@ -23,7 +23,6 @@ int main() {
     }
 
     Singleton<MyClass>::instantiate(42); // Setting up the instance
-
     Singleton<MyClass>::instance()->printMessage(); // Output: "Hello from MyClass"
 
     try

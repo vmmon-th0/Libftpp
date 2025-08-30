@@ -15,7 +15,7 @@ class Message
 
         void reset();
         std::size_t size() const;
-        const std::uint8_t* data() const;
+        const std::byte *data() const;
 
         template <typename T> Message &operator<<(const T &val)
         {

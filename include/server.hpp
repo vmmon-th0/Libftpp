@@ -8,9 +8,9 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <functional>
+#include <iostream>
 #include <list>
 #include <memory>
-#include <iostream>
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <system_error>

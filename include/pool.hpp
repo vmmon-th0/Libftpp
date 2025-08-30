@@ -4,13 +4,19 @@
 #include <iostream>
 #include <vector>
 
+// To learn
+
+// https://en.cppreference.com/w/cpp/language/value_category.html
+// std::construct_at and std::destroy_at
+// https://en.cppreference.com/w/cpp/language/raii.html
+// https://en.cppreference.com/w/cpp/memory/unique_ptr
+// https://en.cppreference.com/w/cpp/utility/forward.html
+// &, &&, const &
+
 template <typename TType> class Pool
 {
     public:
-        Pool()
-        {
-            std::cout << "Instantiate a pool of type: " << typeid(TType).name() << std::endl;
-        }
+        Pool() = default;
 
         ~Pool()
         {

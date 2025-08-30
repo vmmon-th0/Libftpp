@@ -9,8 +9,8 @@ BUILD_DIR := build
 
 CXX	:= clang++
 
-CXXFLAGS := -Wall -Wextra -std=c++20 -I$(INC_DIR) -c
-CXXFLAGS_TEST := -Wall -Wextra -std=c++20 -I$(INC_DIR)
+CXXFLAGS := -Wall -Wextra -std=c++23 -I$(INC_DIR) -c
+CXXFLAGS_TEST := -Wall -Wextra -std=c++23 -I$(INC_DIR)
 
 LIB_NAME := mylib.a
 

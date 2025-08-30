@@ -1,13 +1,15 @@
 #include "observer.hpp"
 #include <iostream>
 
-enum class EventType {
+enum class EventType
+{
     EVENT_ONE,
     EVENT_TWO,
     EVENT_THREE
 };
 
-int main() {
+int main()
+{
     Observer<EventType> observer;
 
     // Subscribe to EVENT_ONE

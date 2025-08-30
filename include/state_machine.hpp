@@ -1,7 +1,23 @@
 #ifndef STATE_MACHINE_HPP
 #define STATE_MACHINE_HPP
 
-#include "design_patterns.hpp"
+#include <unordered_set>
+#include <unordered_map>
+#include <functional>
+#include <stdexcept>
+#include <optional>
+
+// We use this hash function since we are operating on a non-primitive type that unordered map cannot hash.
+// https://quantum5.ca/2019/04/05/using-unordered-data-structures-on-std-pair-cpp/
+
+struct pair_hash
+{
+    template <class T1, class T2>
+    std::size_t operator()(const std::pair<T1, T2>& pair) const
+    {
+        return std::hash<T1>()(pair.first) ^ std::hash<T2>()(pair.second);
+    }
+};
 
 template <typename TState> class StateMachine
 {
@@ -16,21 +32,15 @@ template <typename TState> class StateMachine
 
         void addTransition(const TState &startState, const TState &endState, const std::function<void()> &action)
         {
-            ensureStateExists(startState);
-            ensureStateExists(endState);
+            checkStateExists(startState);
+            checkStateExists(endState);
             _transitions[{startState, endState}] = action;
         }
 
         void addAction(const TState &state, const std::function<void()> &action)
         {
-            ensureStateExists(state);
+            checkStateExists(state);
             _actions[state] = action;
-        }
-
-        void setInitialState(const TState &state)
-        {
-            ensureStateExists(state);
-            _currentState = state;
         }
 
         TState getCurrentState() const
@@ -49,7 +59,7 @@ template <typename TState> class StateMachine
                 throw std::runtime_error("Current state is not set. Cannot transition.");
             }
 
-            ensureStateExists(nextState);
+            checkStateExists(nextState);
 
             auto key = std::make_pair(*_currentState, nextState);
             auto it = _transitions.find(key);
@@ -60,6 +70,12 @@ template <typename TState> class StateMachine
 
             it->second();
             _currentState = nextState;
+        }
+
+        void setInitialState(const TState &state)
+        {
+            checkStateExists(state);
+            _currentState = state;
         }
 
         void update()
@@ -79,7 +95,7 @@ template <typename TState> class StateMachine
         }
 
     private:
-        void ensureStateExists(const TState &state) const
+        void checkStateExists(const TState &state) const
         {
             if (_states.find(state) == _states.end())
             {
@@ -88,7 +104,7 @@ template <typename TState> class StateMachine
         }
 
         std::unordered_set<TState> _states;
-        std::unordered_map<std::pair<TState, TState>, std::function<void()>> _transitions;
+        std::unordered_map<std::pair<TState, TState>, std::function<void()>, pair_hash> _transitions;
         std::unordered_map<TState, std::function<void()>> _actions;
         std::optional<TState> _currentState;
 };

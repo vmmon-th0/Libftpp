@@ -16,6 +16,8 @@ int main() {
     sm.addState(State::Paused);
     sm.addState(State::Stopped);
 
+    sm.setInitialState(State::Idle);
+
     sm.addAction(State::Idle, [] { std::cout << "System is idle." << std::endl; });
     sm.addAction(State::Running, [] { std::cout << "System is running." << std::endl; });
     sm.addAction(State::Paused, [] { std::cout << "System is paused." << std::endl; });
@@ -35,12 +37,6 @@ int main() {
     // Transitioning to and from the new State::Stopped
     try {
         sm.transitionTo(State::Stopped);  // Should not print any transition message, and throw an exception
-    } catch (const std::invalid_argument& e) {
-        std::cout << "Exception caught: " << e.what() << std::endl;  // Handle state not found
-    }
-    
-    try {
-    	sm.transitionTo(State::Stopped);  // Should not print anything, default empty lambda is executed
     } catch (const std::invalid_argument& e) {
         std::cout << "Exception caught: " << e.what() << std::endl;  // Handle state not found
     }

@@ -1,11 +1,14 @@
 #ifndef SINGLETON_HPP
 #define SINGLETON_HPP
 
-#include "design_patterns.hpp"
-
 template <typename TType> class Singleton
 {
     public:
+
+        // Todo -> Are these prevent correct and sufficient?
+        Singleton() = delete; // Prevent instantiation of Singleton class
+        ~Singleton() = delete; // Prevent deletion of Singleton class
+
         static TType *instance()
         {
             if (!_instance)
@@ -25,9 +28,8 @@ template <typename TType> class Singleton
         }
 
     private:
+        // Todo -> inline static / init nullptr ?
         static TType *_instance;
 };
-
-template <typename TType> TType *Singleton<TType>::_instance = nullptr;
 
 #endif

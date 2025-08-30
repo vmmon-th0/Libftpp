@@ -1,11 +1,16 @@
 #ifndef OBSERVER_HPP
 #define OBSERVER_HPP
 
-#include "design_patterns.hpp"
+#include <unordered_map>
+#include <vector>
+#include <functional>
 
 template <typename TEvent> class Observer
 {
     public:
+        Observer() = default;
+        ~Observer() = default;
+
         void subscribe(const TEvent &event, const std::function<void()> &callback)
         {
             this->_callbacks[event].push_back(callback);

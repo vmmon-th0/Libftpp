@@ -1,10 +1,10 @@
 #ifndef THREAD_SAFE_IOSTREAM_HPP
 #define THREAD_SAFE_IOSTREAM_HPP
 
+#include <algorithm>
+#include <iostream>
 #include <mutex>
 #include <sstream>
-#include <iostream>
-#include <algorithm>
 
 class ThreadSafeIostream
 {

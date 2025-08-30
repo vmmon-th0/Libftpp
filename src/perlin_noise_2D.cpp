@@ -10,7 +10,7 @@ PerlinNoise2D::~PerlinNoise2D()
 
 float PerlinNoise2D::sample(int x, int y)
 {
-    return this -> _pnrg(x, y);
+    return this->_pnrg(x, y);
 }
 
 IVector2<float> PerlinNoise2D::randomGradient(int ix, int iy)

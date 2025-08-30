@@ -3,8 +3,8 @@
 
 #include <any>
 #include <cstdint>
-#include <map>
 #include <iostream>
+#include <map>
 #include <string>
 
 class Memento
@@ -25,20 +25,20 @@ class Memento
                 std::string _date;
         };
 
-        Snapshot save();
+        Snapshot save() const;
         void load(const Memento::Snapshot &state);
 
         virtual void _saveToSnapshot(Memento::Snapshot &snapshot) const = 0;
         virtual void _loadFromSnapshot(const Memento::Snapshot &snapshot) = 0;
 };
 
-class MainCharacter : public Memento
+class Player : public Memento
 {
     public:
-        MainCharacter();
+        Player();
 
         void setPseudo(const std::string &pseudo);
-        void setXp(uint8_t xp);
+        void setXp(uint16_t xp);
         std::string getPseudo() const;
         uint16_t getXp() const;
 
@@ -46,8 +46,9 @@ class MainCharacter : public Memento
         void _saveToSnapshot(Memento::Snapshot &snapshot) const override;
         void _loadFromSnapshot(const Memento::Snapshot &snapshot) override;
 
-        static inline const std::string KEY_XP = "xp";
-        static inline const std::string KEY_PSEUDO = "pseudo";
+        // Todo -> static inline understanding
+        const std::string _KEY_XP = "xp";
+        const std::string _KEY_PSEUDO = "pseudo";
 
         std::string _pseudo;
         uint16_t _xp;

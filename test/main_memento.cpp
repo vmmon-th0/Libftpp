@@ -1,46 +1,29 @@
 #include "memento.hpp"
 #include <iostream>
 
-class TestClass : public Memento {
-    friend class Memento;
-
-public:
-    int x;
-    std::string y;
-
-private:
-    void _saveToSnapshot(Memento::Snapshot& snapshotToFill) const override {
-        snapshotToFill << x << y;
-    }
-
-    void _loadFromSnapshot(const Memento::Snapshot& snapshot) override {
-        snapshot >> x >> y;
-    }
-
-};
-
-int main() {
-    TestClass myObject;
-    myObject.x = 42;
-    myObject.y = "Hello";
+int main()
+{
+    Player player;
+    player.setXp(42);
+    player.setPseudo("Briochin");
 
     // Save the current state
-    TestClass::Snapshot savedState = myObject.save();
+    Player::Snapshot savedState = player.save();
 
     // Modify the object
-    myObject.x = 100;
-    myObject.y = "World";
+    player.setXp(4242);
+    player.setPseudo("MrPropre");
 
     // Output the modified object
     // Expected Output: "Current state: x = 100, y = World"
-    std::cout << "Current state: x = " << myObject.x << ", y = " << myObject.y << std::endl;
+    std::cout << "Current state: pseudo = " << player.getPseudo() << ", xp = " << player.getXp() << std::endl;
 
     // Restore the object to its saved state
-    myObject.load(savedState);
+    player.load(savedState);
     
     // Output the restored object
 	// Expected Output: "Restored state: x = 42, y = Hello"
-    std::cout << "Restored state: x = " << myObject.x << ", y = " << myObject.y << std::endl;
+    std::cout << "Restored state: pseudo = " << player.getPseudo() << ", xp = " << player.getXp() << std::endl;
 
     return 0;
 }
