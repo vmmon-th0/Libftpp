@@ -6,9 +6,10 @@
 class Message
 {
     public:
-        using Type = int;
+        using Type = int16_t;
 
         explicit Message(Type t);
+        Message();
         ~Message();
 
         Type getType() const noexcept;

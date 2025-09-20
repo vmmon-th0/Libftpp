@@ -6,16 +6,21 @@
 #include <mutex>
 #include <sstream>
 
+// A thread-safe iostream wrapper that allows setting a prefix for each thread.
+// each thread has its own instance of ThreadSafeIostream, but they share a mutex to
+// ensure that output to std::cout is synchronized.
+
 class ThreadSafeIostream
 {
     public:
-        ThreadSafeIostream();
-        ~ThreadSafeIostream();
+        ThreadSafeIostream() = default;
+        ~ThreadSafeIostream() = default;
 
         template <typename T> void prompt(const std::string &question, T &dest)
         {
             std::lock_guard<std::mutex> lock(this->_mutex);
-            std::cout << _prefix << question;
+            std::cout << _prefix << question << std::endl;
+            std::cout <<  "> ";
             std::cin >> dest;
         }
 

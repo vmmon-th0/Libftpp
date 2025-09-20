@@ -10,6 +10,7 @@
 #include <sys/socket.h>
 #include <system_error>
 #include <unistd.h>
+#include <iostream>
 #include <unordered_map>
 
 class Client

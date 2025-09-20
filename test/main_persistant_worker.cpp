@@ -17,11 +17,15 @@ int main() {
     worker.addTask("Task2", task2);
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
-
+    
     worker.removeTask("Task1");
-
+    
+    auto tp = std::chrono::steady_clock::now();
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+              tp.time_since_epoch()).count();
+    std::cout << "Main thread timestamp: " << ms << " ms since epoch, after removing task 1" << std::endl;
+    
     std::this_thread::sleep_for(std::chrono::seconds(1));
-
     return 0;
 }
 

@@ -6,7 +6,14 @@ Client::Client() : _sockfd(-1)
 
 Client::~Client()
 {
-    disconnect();
+    try
+    {
+        disconnect();
+    }
+    catch (...)
+    {
+        std::cerr << "Exception in Client destructor during disconnect()" << std::endl;
+    }
 }
 
 void Client::connect(const std::string &address, const std::size_t &port)
@@ -42,14 +49,23 @@ void Client::connect(const std::string &address, const std::size_t &port)
             throw std::system_error(errno, std::system_category(), "connect() failed");
         }
     }
+    std::cout << "Connection to server " << address << ":" << port << " successfully initiated." << std::endl;
 }
 
 void Client::disconnect()
 {
     if (this->_sockfd != -1)
     {
-        ::close(this->_sockfd);
+        int ret = ::close(this->_sockfd);
         this->_sockfd = -1;
+        if (ret == -1)
+        {
+            throw std::system_error(errno, std::system_category(), "close() failed");
+        }
+    }
+    else
+    {
+        throw std::runtime_error("Not connected");
     }
 }
 
@@ -64,7 +80,7 @@ void Client::send(const Message &message)
     {
         throw std::runtime_error("Not connected");
     }
-    const std::uint8_t *dataPtr = message.data();
+    const std::byte *dataPtr = message.data();
     std::size_t totalSent = 0;
     while (totalSent < message.size())
     {
@@ -81,7 +97,7 @@ void Client::send(const Message &message)
 }
 
 /* read little‑endian 16 bits */
-uint16_t read_le16(const std::vector<uint8_t> &buf)
+uint16_t read_le16(const std::vector<std::byte> &buf)
 {
     return static_cast<uint16_t>(buf[0]) | (static_cast<uint16_t>(buf[1]) << 8);
 }
@@ -92,7 +108,7 @@ void Client::update()
     {
         return;
     }
-    std::vector<uint8_t> buffer(1500);
+    std::vector<std::byte> buffer(1500);
     ssize_t bytesRead = ::recv(this->_sockfd, buffer.data(), buffer.size(), 0);
     while (bytesRead > 0)
     {

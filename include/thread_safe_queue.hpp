@@ -6,20 +6,26 @@
 #include <mutex>
 #include <system_error>
 
+// A simple thread-safe queue implementation using std::deque and std::mutex.
+// move semantics are supported for push and pop operations.
+// https://isocpp.org/blog/2012/11/universal-references-in-c11-scott-meyers
+
+// mutable mutex ? M & M rules !
+
 template <typename TType> class ThreadSafeQueue
 {
     public:
         ThreadSafeQueue() = default;
         ~ThreadSafeQueue() = default;
 
-        template <typename U> //, typename = typename std::enable_if<std::is_constructible<TType, U &&>::value>::type>
+        template <typename U>
         void push_back(U &&newElement)
         {
             std::lock_guard<std::mutex> lock(this->_mutex);
             this->_queue.push_back(std::forward<U>(newElement));
         }
 
-        template <typename U> //, typename = typename std::enable_if<std::is_constructible<TType, U &&>::value>::type>
+        template <typename U>
         void push_front(U &&newElement)
         {
             std::lock_guard<std::mutex> lock(this->_mutex);

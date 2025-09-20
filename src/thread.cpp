@@ -4,10 +4,12 @@ Thread::Thread(const std::string &name, std::function<void()> func) : _identifie
 {
 }
 
-Thread::~Thread()
+Thread::~Thread() noexcept
 {
-    /* improve err management */
-    this->stop();
+    if (this->_thread.joinable())
+    {
+        this->stop();
+    }
 }
 
 void Thread::start()
@@ -18,18 +20,28 @@ void Thread::start()
         return;
     }
     std::ostringstream errStr;
-    errStr << "Thread id: " << this->_thread.get_id() << " is already instantiated";
+    errStr << "Thread is already instantiated";
     throw std::runtime_error(errStr.str());
 }
 
-void Thread::stop()
+void Thread::join()
+{
+    try
+    {
+        this->_thread.join();
+    }
+    catch (const std::system_error &e)
+    {
+        std::ostringstream errStr;
+        errStr << "Thread join failed: " << e.what();
+        //throw std::runtime_error(errStr.str());
+    }
+}
+
+void Thread::stop() noexcept
 {
     if (this->_thread.joinable())
     {
-        this->_thread.join();
-        return;
+        this->join();
     }
-    std::ostringstream errStr;
-    errStr << "Thread id: " << this->_thread.get_id() << " is not joinable";
-    throw std::runtime_error(errStr.str());
 }

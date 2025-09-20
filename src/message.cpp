@@ -1,8 +1,13 @@
 #include "message.hpp"
 
-Message::Message(int type) : _type(type)
+Message::Message(Type type) : _type(type)
 {
     this->_buffer << type;
+}
+
+Message::Message() : _type(0)
+{
+    this->_buffer << this->_type;
 }
 
 Message::~Message()

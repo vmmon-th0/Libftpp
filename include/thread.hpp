@@ -5,14 +5,17 @@
 #include <functional>
 #include <thread>
 
+// Thread wrapper class
+
 class Thread
 {
     public:
         Thread(const std::string &name, std::function<void()> func);
-        ~Thread();
+        ~Thread() noexcept;
 
         void start();
-        void stop();
+        void join();
+        void stop() noexcept;
 
     private:
         std::thread _thread;

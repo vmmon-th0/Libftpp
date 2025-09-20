@@ -6,7 +6,7 @@ int main() {
     Server server;
 
     // Define an action for messages of type 1 (int)
-    server.defineAction(1, [&server](long long& clientID, const Message& msg){
+    server.defineAction(1, [&server](long long& clientID, Message& msg){
         int value;
         msg >> value;
         threadSafeCout << "Received an int " << value << " from client " << clientID << std::endl;
@@ -18,7 +18,7 @@ int main() {
     });
 
     // Define an action for messages of type 2 (size_t followed by characters)
-    server.defineAction(2, [](long long& clientID, const Message& msg){
+    server.defineAction(2, [](long long& clientID,  Message& msg){
         size_t length;
         std::string text;
         msg >> length;
@@ -31,14 +31,14 @@ int main() {
         threadSafeCout << "Received a string '" << text << "' of length " << length << " from client " << clientID << std::endl;
     });
 
-    // Start the server on port 8080
-    server.start(8080);
+    // Start the server on port 8081
+    server.start(8081);
 
    	bool quit = false;
 
 	while (!quit)
 	{
-		client.update();
+		server.update();
 
 		threadSafeCout << "Server updated." << std::endl;
 		threadSafeCout << "Available operations :" << std::endl;

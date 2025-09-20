@@ -20,7 +20,9 @@ WorkerPool::~WorkerPool()
     for (auto &worker : this->_workers)
     {
         if (worker.joinable())
+        {
             worker.join();
+        }
     }
 }
 
@@ -35,24 +37,18 @@ void WorkerPool::addJob(const std::function<void()> &jobToExecute)
     this->_shutdownCondition.notify_one();
 }
 
-// void WorkerPool::addJob(std::unique_ptr<IJob> job)
-// {
-//     addJob([capturedJob = std::move(job)]() mutable { capturedJob->execute(); });
-// }
-
 void WorkerPool::_workerLoop()
 {
     while (true)
     {
-        std::unique_lock<std::mutex> lock(this->_mutex);
-        this->_shutdownCondition.wait(lock, [this] { return !this->_jobQueue.empty() || this->_stopFlag; });
-
-        if (this->_stopFlag && this->_jobQueue.empty())
         {
-            return;
+            std::unique_lock<std::mutex> lock(this->_mutex);
+            this->_shutdownCondition.wait(lock, [this] { return !this->_jobQueue.empty() || this->_stopFlag; });
+            if (this->_stopFlag && this->_jobQueue.empty())
+            {
+                break;
+            }
         }
-
-        lock.unlock();
         std::function<void()> job;
         try
         {

@@ -37,7 +37,7 @@ void PersistentWorker::_persistentLoop()
             std::unique_lock<std::mutex> lock(this->_mutex);
             if (this->_tasks.empty())
             {
-                this->_cv.wait_for(lock, std::chrono::milliseconds(10),
+                this->_cv.wait_for(lock, std::chrono::milliseconds(5000),
                                    [this] { return !this->_tasks.empty() || !this->_running; });
             }
 
@@ -52,6 +52,7 @@ void PersistentWorker::_persistentLoop()
             try
             {
                 task();
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
             catch (...)
             {

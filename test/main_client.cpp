@@ -12,7 +12,7 @@ int main() {
         threadSafeCout << "Received a doubled value: " << doubledValue << std::endl;
     });
 
-    client.connect("localhost", 8080);
+    client.connect("127.0.0.1", 8081);
 
     Message message1(1);
     message1 << 42;

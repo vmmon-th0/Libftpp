@@ -21,15 +21,22 @@ int main() {
 
     std::thread thread1(testPush, std::ref(myQueue), 10);
     std::thread thread2(testPush, std::ref(myQueue), 20);
-    std::thread thread3(testPop, std::ref(myQueue));
-    std::thread thread4(testPop, std::ref(myQueue));
+    std::thread thread3(testPush, std::ref(myQueue), 30);
+    std::thread thread4(testPush, std::ref(myQueue), 40);
+
     std::thread thread5(testPop, std::ref(myQueue));
+    std::thread thread6(testPop, std::ref(myQueue));
+    std::thread thread7(testPop, std::ref(myQueue));
+    std::thread thread8(testPop, std::ref(myQueue));
 
     thread1.join();
     thread2.join();
     thread3.join();
     thread4.join();
     thread5.join();
+    thread6.join();
+    thread7.join();
+    thread8.join();
 
     return 0;
 }

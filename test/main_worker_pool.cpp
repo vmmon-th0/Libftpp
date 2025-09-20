@@ -1,5 +1,5 @@
-#include "worker_pool.hpp"
 #include <iostream>
+#include "worker_pool.hpp"
 #include "thread_safe_iostream.hpp"
 
 int main() {

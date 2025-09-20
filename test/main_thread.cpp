@@ -4,12 +4,14 @@
 #include "thread_safe_iostream.hpp"
 
 void myFunction1() {
+    threadSafeCout.setPrefix("[Thread 1] ");
     for (int i = 0; i < 5; ++i) {
         threadSafeCout << "Hello from Function1, iteration " << i << std::endl;
     }
 }
 
 void myFunction2() {
+    threadSafeCout.setPrefix("[Thread 2] ");
     for (int i = 0; i < 5; ++i) {
         threadSafeCout << "Hello from Function2, iteration " << i << std::endl;
     }

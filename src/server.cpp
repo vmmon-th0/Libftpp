@@ -57,7 +57,7 @@ void Server::start(const std::size_t &p_port)
     epoll_ctl(epfd, EPOLL_CTL_ADD, this->_sockfd, &ev);
 
     std::vector<epoll_event> events(16);
-    std::vector<uint8_t> buffer(1500);
+    std::vector<std::byte> buffer(1500);
 
     std::cout << "Server started on port " << p_port << "\n";
 
@@ -106,16 +106,14 @@ void Server::start(const std::size_t &p_port)
                 while (true)
                 {
                     ssize_t bytesRead = ::recv(fd, buffer.data(), buffer.size(), 0);
-                    ;
                     if (bytesRead == -1)
                     {
-                        std::cerr << "recv failed: " << std::strerror(errno);
                         break;
                     }
                     else if (bytesRead == 0)
                     {
                         ::close(fd);
-                        std::cerr << "recv failed: " << std::strerror(errno);
+                        std::cerr << "Connection closed by peer" << std::endl;
                         break;
                     }
                     else
@@ -133,7 +131,7 @@ void Server::start(const std::size_t &p_port)
 }
 
 void Server::defineAction(const Message::Type &messageType,
-                          const std::function<void(long long &clientID, const Message &msg)> &action)
+                          const std::function<void(long long &clientID, Message &msg)> &action)
 {
     this->_actions[messageType] = action;
 }
@@ -172,7 +170,7 @@ void Server::sendToAll(const Message &message)
 }
 
 /* read little‑endian 16 bits */
-uint16_t Server::read_le16(const std::vector<uint8_t> &buffer)
+uint16_t Server::read_le16(const std::vector<std::byte> &buffer)
 {
     return static_cast<uint16_t>(buffer[0]) | (static_cast<uint16_t>(buffer[1]) << 8);
 }
@@ -183,9 +181,9 @@ void Server::update()
     messageToProcess = std::move(this->_messagePool);
     this->_messagePool.clear();
 
-    for (auto const &[key, value] : messageToProcess)
+    for (auto &[key, value] : messageToProcess)
     {
-        for (Message const &message : value)
+        for (Message &message : value)
         {
             auto it = this->_actions.find(message.getType());
             it->second(this->_clientIdsReverse[it->first], message);
