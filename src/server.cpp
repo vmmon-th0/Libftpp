@@ -63,10 +63,15 @@ void Server::start(const std::size_t &p_port)
 
     while (true)
     {
-        int n = epoll_wait(epfd, events.data(), events.size(), -1);
+        int n = epoll_wait(epfd, events.data(), events.size(), 5000);
         if (n == -1)
         {
             throw std::system_error(errno, std::generic_category(), "epoll_wait failed");
+        }
+
+        if (n == 0)
+        {
+            update();
         }
 
         for (int i = 0; i < n; i++)
@@ -139,7 +144,7 @@ void Server::defineAction(const Message::Type &messageType,
 void Server::sendTo(const Message &message, long long clientID)
 {
     std::size_t messageLength = message.size();
-    ssize_t bytesSent = send(this->_clientIdsReverse[clientID], message.data(), sizeof(messageLength), 0);
+    ssize_t bytesSent = send(this->_clientIds[clientID], message.data(), sizeof(messageLength), 0);
 
     if (bytesSent == 0)
     {
@@ -181,12 +186,14 @@ void Server::update()
     messageToProcess = std::move(this->_messagePool);
     this->_messagePool.clear();
 
+    std::cout << "Received messages will be processed." << std::endl;
+
     for (auto &[key, value] : messageToProcess)
     {
         for (Message &message : value)
         {
             auto it = this->_actions.find(message.getType());
-            it->second(this->_clientIdsReverse[it->first], message);
+            it->second(this->_clientIdsReverse[key], message);
         }
     }
 }

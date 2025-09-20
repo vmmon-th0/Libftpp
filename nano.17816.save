@@ -1,8 +1,0 @@
-Workers -> 
-
-- Machine plus grosse ⇒ plus de CPU/RAM par worker ⇒ moins de workers à gérer.
-n2-standard-...
-
-- Cela fait grimper le prix du dataflow
-
-- 

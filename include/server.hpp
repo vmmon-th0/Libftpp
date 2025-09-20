@@ -34,7 +34,7 @@ class Server
 
     private:
         int _sockfd;
-        uint16_t _clientIdCounter;
+        long long _clientIdCounter;
 
         std::unordered_map<int, std::list<Message>> _messagePool;
         std::unordered_map<long long, int> _clientIds;
