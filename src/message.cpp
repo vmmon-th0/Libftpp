@@ -19,6 +19,12 @@ Message::Type Message::getType() const noexcept
     return this->_type;
 }
 
+void Message::skipType()
+{
+    Type type;
+    *this >> type;
+}
+
 void Message::reset()
 {
     this->_buffer.reset();

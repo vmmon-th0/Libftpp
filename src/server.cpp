@@ -126,6 +126,7 @@ void Server::start(const std::size_t &p_port)
                         buffer.resize(bytesRead);
                         Message message(read_le16(buffer));
                         message << buffer;
+                        message.skipType();
                         this->_messagePool[fd].push_back(message);
                         buffer.resize(1500);
                     }

@@ -15,6 +15,7 @@ class Message
         Type getType() const noexcept;
 
         void reset();
+        void skipType();
         std::size_t size() const;
         const std::byte *data() const;
 
